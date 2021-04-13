@@ -3,9 +3,9 @@ import os
 import sys
 
 if __name__ == "__main__":
-    if os.environ.get("DEBUG") is None or bool(os.environ.get("DEBUG")):
+    if os.environ.get("DEBUG") is None or eval(os.environ.get("DEBUG")):
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project_conf.settings.dev")
-    elif not bool(os.environ.get("DEBUG")):
+    elif not eval(os.environ.get("DEBUG")):
         os.environ.setdefault(
             "DJANGO_SETTINGS_MODULE", "project_conf.settings.production"
         )

@@ -6,9 +6,28 @@ services:
     environment:
       DEBUG: "${DEBUG}"
       SECRET_KEY: "${SECRET_KEY}"
-    # command: ./start
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      BASE_URL: "${BASE_URL}"
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-      - "8888:8888"
+    depends_on:
+      - db
+
+  db:
+    hostname: contenidos-db
+    container_name: contenidos-db
+    image: postgres
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:

@@ -1,6 +1,20 @@
 version: "3.9"
 
 services:
+  web:
+    build: .
+    environment:
+      DEBUG: "${DEBUG}"
+    command: /start
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - test-nginx_frontend
+
   db:
     hostname: comunidad-db
     container_name: comunidad-db
@@ -15,22 +29,6 @@ services:
     ports:
       - "5432:5432"
 
-  web:
-    build: .
-    environment:
-      DEBUG: "${DEBUG}"
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-    networks:
-      - test-nginx_frontend
   pgadmin:
     image: dpage/pgadmin4:4.18
     environment:
