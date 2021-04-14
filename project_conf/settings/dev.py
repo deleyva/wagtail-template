@@ -1,5 +1,8 @@
 from .base import *
 import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -14,13 +17,14 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 WAGTAIL_CACHE = False
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": "0.0.0.0",
+        "PORT": "5432",
     }
 }
 
