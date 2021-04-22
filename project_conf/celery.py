@@ -32,7 +32,7 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(10.0, count_hompage.s("hello"), name="Printing hello")
+    sender.add_periodic_task(10.0, count_hompage("hello"), name="Printing hello")
 
     # Calls print('world') every 30 seconds
     sender.add_periodic_task(30.0, print("world"), expires=10)

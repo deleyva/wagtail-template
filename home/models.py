@@ -5,5 +5,4 @@ from .tasks import count_hompage
 
 
 class HomePage(Page):
-    print("-----hola-----")
-    count_hompage.delay()
+    pass
