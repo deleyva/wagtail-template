@@ -13,10 +13,11 @@ from django.conf import settings
 
 # this code copied from manage.py
 # set the default Django settings module for the 'celery' app.
-if os.environ.get("DEBUG") is None or eval(os.environ.get("DEBUG")):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project_conf.settings.dev")
-elif not eval(os.environ.get("DEBUG")):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project_conf.settings.production")
+environment = (
+    "dev" if os.environ.get("SETTINGS_SELECTION") in ["dev", None] else "production"
+)
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", f"project_conf.settings.{environment}")
 
 # you change change the name here
 app = Celery("project_conf")
@@ -29,13 +30,9 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(10.0, count_hompage("hello"), name="Printing hello")
-
-    # Calls print('world') every 30 seconds
-    sender.add_periodic_task(30.0, print("world"), expires=10)
+app.conf.beat_schedule = {
+    "count_hompage_3s": {"task": "home.tasks.count_hompage", "schedule": 3.0}
+}
 
 
 @app.task
