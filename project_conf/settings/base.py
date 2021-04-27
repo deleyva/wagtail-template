@@ -161,6 +161,10 @@ WAGTAIL_SITE_NAME = "Comunidad Aularagón"
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = os.environ.get("BASE_URL")
 
+TAGGIT_CASE_INSENSITIVE = True
+
+WAGTAIL_ALLOW_UNICODE_SLUGS = False
+
 # Celery config
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "django-db"
